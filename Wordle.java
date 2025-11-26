@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -8,26 +10,18 @@ public class Wordle {
     // Reads all words from dictionary filename into a String array.
     public static String[] readDictionary(String filename) 
     {
-		String [] str = new String[258];
-        try 
-        {
-            Scanner scanner = new Scanner(new File(filename));
-            for (int i = 0; i < str.length; i++) 
-            {
-                if (scanner.hasNext()) 
-                {
-                    str[i] = scanner.next(); 
-                }
+            List<String> words = new ArrayList<>();
+        
+        try (Scanner scanner = new Scanner(new File(filename))) {
+            while (scanner.hasNext()) {
+                words.add(scanner.next());
             }
-            scanner.close();
-        }   
-        catch (FileNotFoundException e) 
-        {
+        } catch (FileNotFoundException e) {
             System.out.println("Error: File not found.");
+            return new String[0]; 
         }
-        return str;
 
-
+        return words.toArray(new String[0]);
     }
 
     // Choose a random secret word from the dictionary. 
@@ -177,7 +171,7 @@ public class Wordle {
 
             attempt++;
         }
-        scanner.close();
+        
 
         if (!won) 
         {
@@ -185,6 +179,7 @@ public class Wordle {
             System.out.println("The secret word was: " + secret);
         }
 
+        scanner.close();
         inp.close();
     }
 }
